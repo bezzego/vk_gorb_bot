@@ -1,0 +1,17 @@
+:root {
+    --bg: #050915;
+    --panel: rgba(16, 22, 40, 0.9);
+    --card: rgba(18, 24, 42, 0.75);
+    --accent: #ff9b6b;
+    --accent-2: #7dd7ff;
+    --accent-3: #b794ff;
+    --text: #f6f7fb;
+    --muted: #9ea6ba;
+    --border: rgba(255, 255, 255, 0.08);
+    --success: #2dcc70;
+    --warning: #fbbf24;
+    --danger: #ef4444;
+    --shadow: 0 25px 80px rgba(0, 0, 0, 0.45);
+    font-family: "Space Grotesk", "Manrope", system-ui, -apple-system, sans-serif;
+}
+

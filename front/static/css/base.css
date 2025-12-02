@@ -1,0 +1,64 @@
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background:
+        radial-gradient(circle at 20% 20%, rgba(255, 155, 107, 0.16), transparent 30%),
+        radial-gradient(circle at 70% 10%, rgba(108, 139, 255, 0.18), transparent 28%),
+        radial-gradient(circle at 80% 80%, rgba(183, 148, 255, 0.16), transparent 30%),
+        linear-gradient(135deg, #050915 0%, #0a1020 45%, #060912 100%);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 24px;
+}
+
+.backdrop {
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(circle at 50% 0%, rgba(255, 139, 95, 0.08), transparent 35%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.container {
+    position: relative;
+    z-index: 1;
+    max-width: 1200px;
+    margin: 0 auto 80px;
+}
+
+.eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 11px;
+    color: var(--muted);
+    margin: 0 0 2px;
+}
+
+.muted {
+    color: var(--muted);
+    margin: 4px 0 0;
+}
+
+.empty {
+    padding: 12px;
+    color: var(--muted);
+    text-align: center;
+    border: 1px dashed var(--border);
+    border-radius: 12px;
+}
+
+@media (max-width: 900px) {
+    body {
+        padding: 16px;
+    }
+
+    .hero {
+        grid-template-columns: 1fr;
+    }
+}
+

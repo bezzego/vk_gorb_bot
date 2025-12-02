@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Настройки | VK Admin Panel</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<nav class="topbar">
+    <div class="logo">VK Promo Desk</div>
+    <div class="top-actions">
+        <a class="link" href="/">Панель</a>
+    </div>
+</nav>
+<div class="backdrop"></div>
+<main class="container">
+    <header class="hero single">
+        <div>
+            <p class="eyebrow">Настройки</p>
+            <h1>Токены и основные параметры</h1>
+            <p class="lede">Безопасное место для токенов: данные остаются локально в config.json. Мы подскажем, если что-то не так.</p>
+            <div class="hero-actions">
+                <a class="btn ghost" href="/">Назад в панель</a>
+                <button class="btn primary" id="btn-save-config">Сохранить</button>
+            </div>
+        </div>
+    </header>
+
+    <section class="grid single">
+        <article class="card wide">
+            <form id="config-form" class="form-grid">
+                <label>
+                    <span>USER_TOKEN</span>
+                    <textarea name="user_token" id="user_token" rows="2" placeholder="Токен пользователя">{{ config.user_token }}</textarea>
+                </label>
+                <label>
+                    <span>GROUP_TOKEN</span>
+                    <textarea name="group_token" id="group_token" rows="2" placeholder="Токен группы">{{ config.group_token }}</textarea>
+                </label>
+                <div class="two-cols">
+                    <label>
+                        <span>ID группы</span>
+                        <input type="number" name="group_id" id="group_id" value="{{ config.group_id }}" placeholder="223693021">
+                    </label>
+                    <label>
+                        <span>Задержка, сек</span>
+                        <input type="number" step="0.05" min="0.05" max="30" name="request_delay" id="request_delay" value="{{ config.request_delay }}">
+                    </label>
+                </div>
+                <label>
+                    <span>Текст ответа</span>
+                    <textarea name="promo_message" id="promo_message" rows="3" placeholder="Спасибо за участие...">{{ config.promo_message }}</textarea>
+                </label>
+            </form>
+        </article>
+        <article class="card wide callout">
+            <div class="card-header">
+                <div>
+                    <p class="eyebrow">Памятка</p>
+                    <h2>Как защитить токены</h2>
+                    <p class="muted">Три простых правила для клиента.</p>
+                </div>
+            </div>
+            <ul class="list">
+                <li><strong>Держите файл локально.</strong> Не отправляйте config.json в мессенджеры и не коммитьте в git.</li>
+                <li><strong>Регулярно обновляйте.</strong> Если VK обнуляет токен, вставьте новый и нажмите «Сохранить».</li>
+                <li><strong>Разделяйте доступ.</strong> Пользовательский токен — для чтения, токен группы — для ответов.</li>
+            </ul>
+        </article>
+    </section>
+</main>
+
+<div class="toast" id="toast"></div>
+<script>
+    window.__CONFIG__ = {{ config_dict | tojson | safe }};
+</script>
+<script src="/static/settings.js"></script>
+</body>
+</html>
