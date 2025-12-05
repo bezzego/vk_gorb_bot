@@ -21,6 +21,7 @@ from database import (
     get_all_tasks, get_task as get_task_db, get_group_info,
     save_group_info, get_campaign_stats
 )
+from watchers import watchers
 
 app = FastAPI(title="VK Admin Panel", version="1.0.0")
 
@@ -280,6 +281,28 @@ async def get_campaign_stats_api(task_id: str):
     """Получает детальную статистику по кампании."""
     stats = get_campaign_stats(task_id)
     return stats
+
+
+class WatchPayload(BaseModel):
+    post_id: int
+    message: str
+
+
+@app.post("/api/watch")
+async def start_watch(payload: WatchPayload):
+    cfg = load_config()
+    active = get_active_community(cfg)
+    if not active:
+        raise HTTPException(status_code=400, detail="Нет доступных сообществ")
+    if not payload.message.strip():
+        raise HTTPException(status_code=400, detail="Текст автоответа пустой")
+    state = watchers.start(cfg, payload.post_id, payload.message.strip())
+    return {"id": state.id, "status": state.status}
+
+
+@app.get("/api/watch")
+async def list_watch():
+    return {"items": watchers.list()}
 
 
 if __name__ == "__main__":

@@ -167,6 +167,8 @@ class TaskManager:
                 state.id, "failed",
                 error=state.error, log=state.log
             )
+        finally:
+            await client.close()
 
 
 tasks = TaskManager()

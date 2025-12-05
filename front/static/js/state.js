@@ -6,6 +6,7 @@ export const state = {
     pollHandle: null,
     communities: (window.__CONFIG__ && window.__CONFIG__.communities) || [],
     activeGroupId: (window.__CONFIG__ && window.__CONFIG__.active_group_id) || null,
+    watchers: [],
 };
 
 export const els = {
@@ -16,6 +17,7 @@ export const els = {
     sendMessage: document.getElementById("send_message"),
     btnLoadPosts: document.getElementById("btn-load-posts"),
     btnStartSend: document.getElementById("btn-start-send"),
+    btnStartWatch: document.getElementById("btn-start-watch"),
     btnRefreshTasks: document.getElementById("btn-refresh-tasks"),
     btnRefreshPosts: document.getElementById("btn-refresh-posts"),
     btnOpenSend: document.getElementById("btn-open-send"),
@@ -29,4 +31,6 @@ export const els = {
     log: document.getElementById("log"),
     tasksTable: document.getElementById("tasks-table"),
     communitySelect: document.getElementById("community-select"),
+    watchStats: document.getElementById("watch-stats"),
+    watchBadge: document.getElementById("watchers-badge"),
 };

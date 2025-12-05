@@ -227,6 +227,37 @@ class VKService:
 
         return list(user_to_comment.items())
 
+    async def fetch_comments(self, post_id: int, limit: int = 30) -> List[Dict[str, object]]:
+        try:
+            resp = await self.user_api.request(
+                "wall.getComments",
+                {
+                    "owner_id": self.owner_id,
+                    "post_id": post_id,
+                    "offset": 0,
+                    "count": limit,
+                    "sort": "desc",
+                },
+            )
+        except VKAPIError as exc:
+            raise RuntimeError(f"VK API error while loading comments: {exc}") from exc
+
+        payload = resp.get("response", resp) if isinstance(resp, dict) else {}
+        items = payload.get("items") if isinstance(payload, dict) else []
+        result: List[Dict[str, object]] = []
+        for c in items or []:
+            result.append({"id": c.get("id"), "from_id": c.get("from_id")})
+        return result
+
+    async def close(self) -> None:
+        """Закрываем HTTP-сессии vkBottle, чтобы не было утечек."""
+        for api in (self.user_api, self.group_api):
+            if hasattr(api, "http_client") and hasattr(api.http_client, "close"):
+                try:
+                    await api.http_client.close()  # type: ignore[attr-defined]
+                except Exception:
+                    pass
+
     async def reply_to_comment(self, post_id: int, comment_id: int, message: str) -> bool:
         try:
             await self.group_api.wall.create_comment(

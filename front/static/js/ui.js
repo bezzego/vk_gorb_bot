@@ -52,7 +52,8 @@ export function renderPosts(items) {
 
     state.posts.forEach((post) => {
         const wrapper = document.createElement("label");
-        wrapper.className = "post";
+        const hasWatch = (state.watchers || []).some((w) => Number(w.post_id) === Number(post.id) && w.status === "running");
+        wrapper.className = "post" + (hasWatch ? " watched" : "");
         
         // Форматируем дату
         const date = post.date ? new Date(post.date).toLocaleDateString("ru-RU") : "";
@@ -77,6 +78,7 @@ export function renderPosts(items) {
                     <span>❤️ ${post.likes || 0}</span>
                     <span>🔄 ${post.reposts || 0}</span>
                     ${date ? `<span class="muted">${date}</span>` : ""}
+                    ${hasWatch ? `<span class="pill watched">Автоответ</span>` : ""}
                 </div>
             </div>
         `;
@@ -153,5 +155,27 @@ export function renderTasksTable(items) {
             <div class="muted">${task.sent}/${task.total}</div>
         `;
         els.tasksTable.appendChild(row);
+    });
+}
+
+export function renderWatchers(items) {
+    if (!els.watchStats) return;
+    els.watchStats.innerHTML = "";
+    if (!items.length) {
+        els.watchStats.innerHTML = '<div class="empty">Нет активных автоответов.</div>';
+        if (els.watchBadge) els.watchBadge.textContent = "0";
+        return;
+    }
+    if (els.watchBadge) els.watchBadge.textContent = items.length.toString();
+    items.forEach((w) => {
+        const row = document.createElement("div");
+        row.className = "row";
+        row.innerHTML = `
+            <div class="muted">Пост ${w.post_id}</div>
+            <div class="pill ${w.status}">${w.status}</div>
+            <div class="muted">Ответов: ${w.replied}</div>
+            <div class="muted">Ошибок: ${w.errors}</div>
+        `;
+        els.watchStats.appendChild(row);
     });
 }

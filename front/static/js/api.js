@@ -88,3 +88,25 @@ export async function setActiveGroup(groupId) {
     }
     return await res.json();
 }
+
+export async function startWatch(postId, message) {
+    const res = await fetch("/api/watch", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ post_id: Number(postId), message }),
+    });
+    if (!res.ok) throw new Error(await res.text());
+    return await res.json();
+}
+
+export async function fetchWatchers() {
+    try {
+        const res = await fetch("/api/watch");
+        if (!res.ok) return [];
+        const data = await res.json();
+        return data.items || [];
+    } catch (err) {
+        console.error(err);
+        return [];
+    }
+}

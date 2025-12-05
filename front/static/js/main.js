@@ -8,8 +8,18 @@ import {
     renderTasksTable,
     updateGroupInfo,
     renderCommunitySelect,
+    renderWatchers,
 } from "./ui.js";
-import { loadPosts, startSend, fetchTask, fetchTasks, fetchGroupInfo, setActiveGroup } from "./api.js";
+import {
+    loadPosts,
+    startSend,
+    fetchTask,
+    fetchTasks,
+    fetchGroupInfo,
+    setActiveGroup,
+    startWatch,
+    fetchWatchers,
+} from "./api.js";
 
 async function handleLoadPosts() {
     const items = await loadPosts();
@@ -65,6 +75,12 @@ async function refreshTasks() {
     renderTasksTable(items);
 }
 
+async function refreshWatchers() {
+    state.watchers = await fetchWatchers();
+    renderWatchers(state.watchers);
+    renderPosts(state.posts); // обновляем подсветку постов
+}
+
 async function handleChangeCommunity(groupId) {
     try {
         const data = await setActiveGroup(groupId);
@@ -87,6 +103,27 @@ async function handleChangeCommunity(groupId) {
     }
 }
 
+async function handleStartWatch() {
+    const postIds = [...state.selected];
+    const message = document.getElementById("watch_message")?.value.trim() || "";
+    if (!postIds.length) {
+        toast("Выберите пост для автоответа", true);
+        return;
+    }
+    if (!message) {
+        toast("Введите текст автоответа", true);
+        return;
+    }
+    try {
+        await startWatch(postIds[0], message);
+        toast("Автоответ запущен");
+        await refreshWatchers();
+        await handleLoadPosts();
+    } catch (err) {
+        toast("Не удалось запустить автоответ", true);
+    }
+}
+
 function bindEvents() {
     els.communitySelect?.addEventListener("change", (e) => {
         const val = Number(e.target.value);
@@ -101,6 +138,10 @@ function bindEvents() {
     els.btnStartSend?.addEventListener("click", (e) => {
         e.preventDefault();
         handleStartSend();
+    });
+    document.getElementById("btn-start-watch")?.addEventListener("click", (e) => {
+        e.preventDefault();
+        handleStartWatch();
     });
     els.btnRefreshTasks?.addEventListener("click", (e) => {
         e.preventDefault();
@@ -129,6 +170,7 @@ function init() {
     bindEvents();
     updateMetricsFromConfig();
     refreshTasks();
+    refreshWatchers();
     loadGroupInfo(); // Загружаем информацию о группе
 }
 

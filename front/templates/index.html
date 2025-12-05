@@ -13,6 +13,7 @@
 <nav class="topbar">
     <div class="logo">VK Promo Desk</div>
     <div class="top-actions">
+        <a class="link" href="#watchers">Автоответы <span class="badge" id="watchers-badge">0</span></a>
         <a class="link" href="/settings">Настройки</a>
     </div>
 </nav>
@@ -87,6 +88,27 @@
                 </label>
                 <div class="selected-posts" id="selected-posts">Посты не выбраны.</div>
             </form>
+        </article>
+
+        <article class="card" id="watchers">
+            <div class="card-header">
+                <div>
+                    <p class="eyebrow">Автоответ</p>
+                    <h2>Новые комментарии</h2>
+                    <p class="muted">Выберите один пост и задайте текст для мгновенного ответа новым комментаторам.</p>
+                </div>
+                <button class="btn secondary" id="btn-start-watch">Запустить автоответ</button>
+            </div>
+            <form class="form-grid">
+                <label>
+                    <span>Текст автоответа</span>
+                    <textarea id="watch_message" rows="3" placeholder="Спасибо за комментарий! Вот твой бонус..."></textarea>
+                </label>
+                <div class="muted">Используется первый выбранный пост из списка выше.</div>
+            </form>
+            <div class="table" id="watch-stats">
+                <div class="empty">Нет активных автоответов.</div>
+            </div>
         </article>
 
         <article class="card">
