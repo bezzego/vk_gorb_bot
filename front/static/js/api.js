@@ -4,7 +4,7 @@ import { toast } from "./ui.js";
 export async function loadPosts() {
     els.postsList.innerHTML = '<div class="empty">Загружаю посты...</div>';
     try {
-        const res = await fetch("/api/posts?limit=25");
+        const res = await fetch("/api/posts?limit=100");
         if (!res.ok) throw new Error(await res.text());
         const data = await res.json();
         return data.items || [];
@@ -76,3 +76,15 @@ export async function fetchPostDetails(postId) {
     }
 }
 
+export async function setActiveGroup(groupId) {
+    const res = await fetch("/api/config/active", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ group_id: Number(groupId) }),
+    });
+    if (!res.ok) {
+        const detail = await res.text();
+        throw new Error(detail);
+    }
+    return await res.json();
+}

@@ -1,6 +1,15 @@
 import { state, els } from "./state.js";
-import { toast, renderPosts, renderSelectedPosts, updateMetricsFromConfig, updateTaskUI, renderTasksTable, updateGroupInfo } from "./ui.js";
-import { loadPosts, startSend, fetchTask, fetchTasks, fetchGroupInfo } from "./api.js";
+import {
+    toast,
+    renderPosts,
+    renderSelectedPosts,
+    updateMetricsFromConfig,
+    updateTaskUI,
+    renderTasksTable,
+    updateGroupInfo,
+    renderCommunitySelect,
+} from "./ui.js";
+import { loadPosts, startSend, fetchTask, fetchTasks, fetchGroupInfo, setActiveGroup } from "./api.js";
 
 async function handleLoadPosts() {
     const items = await loadPosts();
@@ -56,7 +65,35 @@ async function refreshTasks() {
     renderTasksTable(items);
 }
 
+async function handleChangeCommunity(groupId) {
+    try {
+        const data = await setActiveGroup(groupId);
+        state.config = data;
+        state.communities = data.communities || [];
+        state.activeGroupId = data.active_group_id;
+        state.selected = new Set();
+        renderCommunitySelect();
+        renderSelectedPosts();
+        updateMetricsFromConfig();
+        const groupInfo = await fetchGroupInfo();
+        if (groupInfo) updateGroupInfo(groupInfo);
+        const items = await loadPosts();
+        if (items.length > 0) {
+            renderPosts(items);
+            toast("Сообщество переключено");
+        }
+    } catch (err) {
+        toast("Не удалось переключить сообщество", true);
+    }
+}
+
 function bindEvents() {
+    els.communitySelect?.addEventListener("change", (e) => {
+        const val = Number(e.target.value);
+        if (val) {
+            handleChangeCommunity(val);
+        }
+    });
     els.btnLoadPosts?.addEventListener("click", (e) => {
         e.preventDefault();
         handleLoadPosts();
@@ -88,6 +125,7 @@ async function loadGroupInfo() {
 
 function init() {
     renderSelectedPosts();
+    renderCommunitySelect();
     bindEvents();
     updateMetricsFromConfig();
     refreshTasks();
@@ -95,4 +133,3 @@ function init() {
 }
 
 document.addEventListener("DOMContentLoaded", init);
-

@@ -143,6 +143,16 @@ body {
     background: rgba(255, 255, 255, 0.02);
 }
 
+select.select {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text);
+    font-weight: 600;
+}
+
 .metric .label {
     color: var(--muted);
     margin: 0;
@@ -213,6 +223,34 @@ body {
 
 .card.callout {
     background: linear-gradient(120deg, rgba(255, 155, 107, 0.12), rgba(183, 148, 255, 0.12));
+}
+
+.hero-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 10px;
+    margin-top: 14px;
+}
+
+.mini-card {
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.mini-card .label {
+    margin: 0;
+    color: var(--muted);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.mini-card .value {
+    margin: 6px 0 0;
+    font-weight: 700;
+    font-size: 18px;
 }
 
 .card-header {
@@ -600,6 +638,54 @@ textarea:focus {
 
 .list li {
     margin-bottom: 6px;
+}
+
+.community-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.community-item {
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.02);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.community-item.active {
+    border-color: rgba(255, 155, 107, 0.35);
+    box-shadow: 0 12px 40px rgba(255, 155, 107, 0.15);
+}
+
+.community-item label {
+    margin-bottom: 12px;
+}
+
+.community-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.radio {
+    display: inline-flex;
+    gap: 8px;
+    align-items: center;
+    color: var(--muted);
+    font-weight: 600;
+}
+
+.community-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.community-item .two-cols {
+    gap: 16px;
 }
 
 @media (max-width: 900px) {

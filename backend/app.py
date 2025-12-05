@@ -7,7 +7,14 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel, Field, validator
 
-from storage import BotConfig, config_to_dict, load_config, save_config, update_config
+from storage import (
+    BotConfig,
+    config_to_dict,
+    get_active_community,
+    load_config,
+    save_config,
+    update_config,
+)
 from tasks import TaskState, tasks
 from vk_service import VKService
 from database import (
@@ -26,10 +33,16 @@ templates = Jinja2Templates(directory=str(TEMPLATES_DIR))
 app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
 
 
-class ConfigPayload(BaseModel):
+class CommunityPayload(BaseModel):
+    name: str | None = ""
+    group_id: int
     user_token: str
     group_token: str
-    group_id: int
+
+
+class ConfigPayload(BaseModel):
+    communities: list[CommunityPayload]
+    active_group_id: int | None = None
     request_delay: float = Field(ge=0.05, le=30.0)
     promo_message: str
 
@@ -87,13 +100,42 @@ async def get_config():
 @app.post("/api/config")
 async def save_config_api(payload: ConfigPayload):
     payload_dict = payload.model_dump() if hasattr(payload, "model_dump") else payload.dict()
+
+    if not payload_dict.get("communities"):
+        raise HTTPException(status_code=400, detail="Нужно добавить хотя бы одно сообщество")
+
+    if not payload_dict.get("active_group_id"):
+        payload_dict["active_group_id"] = payload_dict["communities"][0]["group_id"]
+
     cfg = update_config(payload_dict)
     return {"ok": True, "config": config_to_dict(cfg)}
 
 
-@app.get("/api/posts")
-async def get_posts(limit: int = 20):
+class ActiveGroupPayload(BaseModel):
+    group_id: int
+
+
+@app.post("/api/config/active")
+async def set_active_group(payload: ActiveGroupPayload):
     cfg = load_config()
+    if not any(c.group_id == payload.group_id for c in cfg.communities):
+        raise HTTPException(status_code=400, detail="Сообщество не найдено")
+    cfg.active_group_id = payload.group_id
+    # обновляем legacy поля для совместимости
+    active = get_active_community(cfg)
+    if active:
+        cfg.group_id = active.group_id
+        cfg.user_token = active.user_token
+        cfg.group_token = active.group_token
+    save_config(cfg)
+    return config_to_dict(cfg)
+
+
+@app.get("/api/posts")
+async def get_posts(limit: int = 100):
+    cfg = load_config()
+    if not get_active_community(cfg):
+        raise HTTPException(status_code=400, detail="Не выбрано сообщество")
     client = VKService(cfg)
     safe_limit = max(1, min(limit, 100))
     try:
@@ -107,8 +149,9 @@ async def get_posts(limit: int = 20):
 async def start_campaign(payload: SendPayload):
     cfg = load_config()
     promo_message = (payload.message or cfg.promo_message).strip()
+    active = get_active_community(cfg)
 
-    if not cfg.user_token or not cfg.group_token:
+    if not active or not active.user_token or not active.group_token:
         raise HTTPException(status_code=400, detail="Сначала сохраните токены и группу")
 
     if not promo_message:
@@ -186,11 +229,12 @@ async def get_task(task_id: str):
 async def get_group_info_api():
     """Получает информацию о группе."""
     cfg = load_config()
-    if not cfg.user_token or not cfg.group_id:
+    active = get_active_community(cfg)
+    if not active or not active.user_token or not active.group_id:
         raise HTTPException(status_code=400, detail="Токены не настроены")
     
     # Проверяем кэш в БД
-    cached_info = get_group_info(cfg.group_id)
+    cached_info = get_group_info(active.group_id)
     
     # Если кэш свежий (менее часа), возвращаем его
     if cached_info:
@@ -204,7 +248,7 @@ async def get_group_info_api():
         client = VKService(cfg)
         group_data = await client.get_group_info()
         if group_data:
-            save_group_info(cfg.group_id, group_data)
+            save_group_info(active.group_id, group_data)
             return group_data
         else:
             return cached_info or {}
@@ -219,7 +263,8 @@ async def get_group_info_api():
 async def get_post_details_api(post_id: int):
     """Получает детальную информацию о посте."""
     cfg = load_config()
-    if not cfg.user_token:
+    active = get_active_community(cfg)
+    if not active or not active.user_token:
         raise HTTPException(status_code=400, detail="Токены не настроены")
     
     try:

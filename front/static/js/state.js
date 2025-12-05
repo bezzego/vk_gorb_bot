@@ -4,6 +4,8 @@ export const state = {
     selected: new Set((window.__CONFIG__ && window.__CONFIG__.post_ids) || []),
     currentTaskId: null,
     pollHandle: null,
+    communities: (window.__CONFIG__ && window.__CONFIG__.communities) || [],
+    activeGroupId: (window.__CONFIG__ && window.__CONFIG__.active_group_id) || null,
 };
 
 export const els = {
@@ -26,5 +28,5 @@ export const els = {
     statusDot: document.getElementById("status-dot"),
     log: document.getElementById("log"),
     tasksTable: document.getElementById("tasks-table"),
+    communitySelect: document.getElementById("community-select"),
 };
-

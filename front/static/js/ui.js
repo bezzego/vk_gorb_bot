@@ -16,6 +16,22 @@ export function updateMetricsFromConfig() {
     if (delayEl) delayEl.textContent = cfg.request_delay || 0;
 }
 
+export function renderCommunitySelect() {
+    if (!els.communitySelect) return;
+    els.communitySelect.innerHTML = "";
+    if (!state.communities || !state.communities.length) {
+        els.communitySelect.innerHTML = '<option value="">Нет сообществ</option>';
+        return;
+    }
+    state.communities.forEach((c) => {
+        const opt = document.createElement("option");
+        opt.value = c.group_id;
+        opt.textContent = c.name || `Группа ${c.group_id}`;
+        if (Number(state.activeGroupId) === Number(c.group_id)) opt.selected = true;
+        els.communitySelect.appendChild(opt);
+    });
+}
+
 export function renderSelectedPosts() {
     const list = [...state.selected];
     if (!list.length) {
@@ -139,4 +155,3 @@ export function renderTasksTable(items) {
         els.tasksTable.appendChild(row);
     });
 }
-

@@ -5,7 +5,7 @@ from typing import Callable, Dict, Iterable, List, Tuple
 from vkbottle import API
 from vkbottle.exception_factory import VKAPIError
 
-from storage import BotConfig
+from storage import BotConfig, get_active_community
 from database import save_user_info
 
 ProgressHandler = Callable[[Dict[str, object]], None]
@@ -19,9 +19,12 @@ def _safe_text_preview(text: str, limit: int = 80) -> str:
 class VKService:
     def __init__(self, cfg: BotConfig) -> None:
         self.cfg = cfg
-        self.owner_id = -abs(cfg.group_id)
-        self.user_api = API(cfg.user_token)
-        self.group_api = API(cfg.group_token)
+        community = get_active_community(cfg)
+        if not community:
+            raise RuntimeError("Не выбрано сообщество")
+        self.owner_id = -abs(community.group_id)
+        self.user_api = API(community.user_token)
+        self.group_api = API(community.group_token)
 
     async def fetch_posts(self, limit: int = 20) -> List[Dict[str, object]]:
         try:
