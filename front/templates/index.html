@@ -10,164 +10,179 @@
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-<nav class="topbar">
-    <div class="logo">VK Promo Desk</div>
-    <div class="top-actions">
-        <a class="link" href="#watchers">Автоответы <span class="badge" id="watchers-badge">0</span></a>
-        <a class="link" href="/settings">Настройки</a>
-    </div>
-</nav>
-<div class="backdrop"></div>
-<main class="container">
-    <header class="hero">
-        <div>
-            <p class="eyebrow">Админ панель</p>
-            <h1>VK рассылки</h1>
-            <p class="lede">Контрольный центр: выберите посты, настройте текст и запускайте ответы в пару кликов. Прозрачный прогресс и логи.</p>
-            <div class="hero-actions">
-                <button class="btn ghost" id="btn-refresh-posts">Обновить посты</button>
-                <button class="btn primary" id="btn-open-send">Запустить рассылку</button>
-                <a class="btn secondary" href="/settings">Настройки</a>
-            </div>
+    <!-- Навигация -->
+    <nav class="topbar">
+        <div class="logo">VK Promo Desk</div>
+        <div class="top-actions">
+            <a class="link" href="#watchers">Автоответы <span class="badge" id="watchers-badge">0</span></a>
+            <a class="link" href="/settings">Настройки</a>
         </div>
-        <div class="hero-metrics">
-            <div class="metric">
-                <p class="label">Сообщество</p>
-                <select id="community-select" class="select">
-                    <option>Загрузка...</option>
-                </select>
-            </div>
-            <div class="metric">
-                <p class="label">Группа</p>
-                <p class="value" id="metric-group-name">Загрузка...</p>
-            </div>
-            <div class="metric">
-                <p class="label">Подписчиков</p>
-                <p class="value" id="metric-members">-</p>
-            </div>
-            <div class="metric">
-                <p class="label">Текущий пост</p>
-                <p class="value" id="metric-post">{{ (config.post_ids[0] if config.post_ids else '-') }}</p>
-            </div>
-            <div class="metric">
-                <p class="label">Задержка</p>
-                <p class="value"><span id="metric-delay">{{ config.request_delay }}</span> c</p>
-            </div>
-        </div>
-    </header>
+    </nav>
 
+    <main class="container">
+        <!-- Главный заголовок и метрики -->
+        <header class="hero">
+            <div>
+                <p class="eyebrow">Админ панель</p>
+                <h1>VK рассылки</h1>
+                <p class="lede">Контрольный центр: выберите посты, настройте текст и запускайте ответы в пару кликов. Прозрачный прогресс и логи.</p>
+                <div class="hero-actions">
+                    <button class="btn ghost" id="btn-refresh-posts">Обновить посты</button>
+                    <button class="btn primary" id="btn-open-send">Запустить рассылку</button>
+                    <a class="btn secondary" href="/settings">Настройки</a>
+                </div>
+            </div>
+            <div class="hero-metrics">
+                <div class="metric">
+                    <p class="label">Сообщество</p>
+                    <select id="community-select" class="select">
+                        <option>Загрузка...</option>
+                    </select>
+                </div>
+                <div class="metric">
+                    <p class="label">Группа</p>
+                    <p class="value" id="metric-group-name">Загрузка...</p>
+                </div>
+                <div class="metric">
+                    <p class="label">Подписчиков</p>
+                    <p class="value" id="metric-members">-</p>
+                </div>
+                <div class="metric">
+                    <p class="label">Текущий пост</p>
+                    <p class="value" id="metric-post">{{ (config.post_ids[0] if config.post_ids else '-') }}</p>
+                </div>
+                <div class="metric">
+                    <p class="label">Задержка</p>
+                    <p class="value"><span id="metric-delay">{{ config.request_delay }}</span> c</p>
+                </div>
+            </div>
+        </header>
 
-    <section class="grid">
-        <article class="card">
-            <div class="card-header">
-                <div>
-                    <p class="eyebrow">Контент</p>
-                    <h2>Выбор постов</h2>
-                    <p class="muted">Подтяните ленту группы и отметьте посты для рассылки.</p>
-                </div>
-                <button class="btn ghost" id="btn-load-posts">Загрузить посты</button>
+        <!-- Основной контент - разделен на секции -->
+        <section class="content-sections">
+            
+            <!-- СЕКЦИЯ 1: Управление постами -->
+            <div class="section-group">
+                <article class="card">
+                    <div class="card-header">
+                        <div>
+                            <p class="eyebrow">Контент</p>
+                            <h2>Выбор постов</h2>
+                            <p class="muted">Подтяните ленту группы и отметьте посты для рассылки.</p>
+                        </div>
+                        <button class="btn ghost" id="btn-load-posts">Загрузить посты</button>
+                    </div>
+                    <div class="posts-list" id="posts-list">
+                        <div class="empty">Нажмите «Загрузить посты», чтобы увидеть список.</div>
+                    </div>
+                </article>
             </div>
-            <div class="posts-list" id="posts-list">
-                <div class="empty">Нажмите «Загрузить посты», чтобы увидеть список.</div>
-            </div>
-        </article>
 
-        <article class="card">
-            <div class="card-header">
-                <div>
-                    <p class="eyebrow">Запуск</p>
-                    <h2>Рассылка</h2>
-                    <p class="muted">Выберите посты, при необходимости правьте текст и запускайте отправку.</p>
-                </div>
-                <button class="btn primary" id="btn-start-send">Старт</button>
+            <!-- СЕКЦИЯ 2: Рассылка -->
+            <div class="section-group">
+                <article class="card">
+                    <div class="card-header">
+                        <div>
+                            <p class="eyebrow">Запуск</p>
+                            <h2>Рассылка</h2>
+                            <p class="muted">Выберите посты, при необходимости правьте текст и запускайте отправку.</p>
+                        </div>
+                        <button class="btn primary" id="btn-start-send">Старт</button>
+                    </div>
+                    <form id="send-form" class="form-grid">
+                        <label>
+                            <span>Текст сообщения</span>
+                            <textarea name="send_message" id="send_message" rows="4" placeholder="Сообщение для участников">{{ config.promo_message }}</textarea>
+                        </label>
+                        <div class="selected-posts" id="selected-posts">Посты не выбраны.</div>
+                    </form>
+                </article>
             </div>
-            <form id="send-form" class="form-grid">
-                <label>
-                    <span>Текст сообщения</span>
-                    <textarea name="send_message" id="send_message" rows="4" placeholder="Сообщение для участников">{{ config.promo_message }}</textarea>
-                </label>
-                <div class="selected-posts" id="selected-posts">Посты не выбраны.</div>
-            </form>
-        </article>
 
-        <article class="card" id="watchers">
-            <div class="card-header">
-                <div>
-                    <p class="eyebrow">Автоответ</p>
-                    <h2>Новые комментарии</h2>
-                    <p class="muted">Выберите один пост и задайте текст для мгновенного ответа новым комментаторам.</p>
-                </div>
-                <button class="btn secondary" id="btn-start-watch">Запустить автоответ</button>
+            <!-- СЕКЦИЯ 3: Автоответы -->
+            <div class="section-group" id="watchers">
+                <article class="card">
+                    <div class="card-header">
+                        <div>
+                            <p class="eyebrow">Автоответ</p>
+                            <h2>Новые комментарии</h2>
+                            <p class="muted">Выберите один пост и задайте текст для мгновенного ответа новым комментаторам.</p>
+                        </div>
+                        <button class="btn secondary" id="btn-start-watch">Запустить автоответ</button>
+                    </div>
+                    <form class="form-grid">
+                        <label>
+                            <span>Текст автоответа</span>
+                            <textarea id="watch_message" rows="3" placeholder="Спасибо за комментарий! Вот твой бонус..."></textarea>
+                        </label>
+                        <div class="muted">Используется первый выбранный пост из списка выше.</div>
+                    </form>
+                    <div class="table" id="watch-stats">
+                        <div class="empty">Нет активных автоответов.</div>
+                    </div>
+                </article>
             </div>
-            <form class="form-grid">
-                <label>
-                    <span>Текст автоответа</span>
-                    <textarea id="watch_message" rows="3" placeholder="Спасибо за комментарий! Вот твой бонус..."></textarea>
-                </label>
-                <div class="muted">Используется первый выбранный пост из списка выше.</div>
-            </form>
-            <div class="table" id="watch-stats">
-                <div class="empty">Нет активных автоответов.</div>
-            </div>
-        </article>
 
-        <article class="card">
-            <div class="card-header">
-                <div>
-                    <p class="eyebrow">Мониторинг</p>
-                    <h2>Текущая задача</h2>
-                    <p class="muted">Статус, прогресс и последние события.</p>
-                </div>
-                <div class="status-dot" id="status-dot" data-state="idle"></div>
-            </div>
-            <div class="progress-wrap">
-                <div class="progress-bar">
-                    <div class="progress" id="progress-bar"></div>
-                </div>
-                <div class="progress-meta">
-                    <span id="progress-status">Ожидание</span>
-                    <span id="progress-counter">0 / 0</span>
-                </div>
-            </div>
-            <div class="counters">
-                <div class="counter">
-                    <p class="label">Отправлено</p>
-                    <p class="value" id="counter-sent">0</p>
-                </div>
-                <div class="counter">
-                    <p class="label">Ошибок</p>
-                    <p class="value" id="counter-failed">0</p>
-                </div>
-                <div class="counter">
-                    <p class="label">Всего</p>
-                    <p class="value" id="counter-total">0</p>
-                </div>
-            </div>
-            <div class="log" id="log"></div>
-        </article>
+            <!-- СЕКЦИЯ 4: Мониторинг и история -->
+            <div class="section-group">
+                <article class="card">
+                    <div class="card-header">
+                        <div>
+                            <p class="eyebrow">Мониторинг</p>
+                            <h2>Текущая задача</h2>
+                            <p class="muted">Статус, прогресс и последние события.</p>
+                        </div>
+                        <div class="status-dot" id="status-dot" data-state="idle"></div>
+                    </div>
+                    <div class="progress-wrap">
+                        <div class="progress-bar">
+                            <div class="progress" id="progress-bar"></div>
+                        </div>
+                        <div class="progress-meta">
+                            <span id="progress-status">Ожидание</span>
+                            <span id="progress-counter">0 / 0</span>
+                        </div>
+                    </div>
+                    <div class="counters">
+                        <div class="counter">
+                            <p class="label">Отправлено</p>
+                            <p class="value" id="counter-sent">0</p>
+                        </div>
+                        <div class="counter">
+                            <p class="label">Ошибок</p>
+                            <p class="value" id="counter-failed">0</p>
+                        </div>
+                        <div class="counter">
+                            <p class="label">Всего</p>
+                            <p class="value" id="counter-total">0</p>
+                        </div>
+                    </div>
+                    <div class="log" id="log"></div>
+                </article>
 
-        <article class="card wide">
-            <div class="card-header">
-                <div>
-                    <p class="eyebrow">История</p>
-                    <h2>Задачи</h2>
-                    <p class="muted">Последние рассылки и их результат.</p>
-                </div>
-                <button class="btn ghost" id="btn-refresh-tasks">Обновить</button>
+                <article class="card wide">
+                    <div class="card-header">
+                        <div>
+                            <p class="eyebrow">История</p>
+                            <h2>Задачи</h2>
+                            <p class="muted">Последние рассылки и их результат.</p>
+                        </div>
+                        <button class="btn ghost" id="btn-refresh-tasks">Обновить</button>
+                    </div>
+                    <div class="table" id="tasks-table">
+                        <div class="empty">Пока нет запущенных задач.</div>
+                    </div>
+                </article>
             </div>
-            <div class="table" id="tasks-table">
-                <div class="empty">Пока нет запущенных задач.</div>
-            </div>
-        </article>
 
-    </section>
-</main>
+        </section>
+    </main>
 
-<div class="toast" id="toast"></div>
+    <div class="toast" id="toast"></div>
 
-<script>
-    window.__CONFIG__ = {{ config_dict | tojson | safe }};
-</script>
-<script type="module" src="/static/js/main.js"></script>
+    <script>
+        window.__CONFIG__ = {{ config_dict | tojson | safe }};
+    </script>
+    <script type="module" src="/static/js/main.js"></script>
 </body>
 </html>

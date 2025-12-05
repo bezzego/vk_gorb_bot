@@ -6,59 +6,84 @@
 
 body {
     margin: 0;
-    background:
-        radial-gradient(circle at 20% 20%, rgba(255, 155, 107, 0.16), transparent 30%),
-        radial-gradient(circle at 70% 10%, rgba(108, 139, 255, 0.18), transparent 28%),
-        radial-gradient(circle at 80% 80%, rgba(183, 148, 255, 0.16), transparent 30%),
-        linear-gradient(135deg, #050915 0%, #0a1020 45%, #060912 100%);
+    background: var(--gradient-bg);
     color: var(--text);
     min-height: 100vh;
-    padding: 24px;
+    padding: 0;
+    font-family: "Space Grotesk", "Manrope", system-ui, -apple-system, sans-serif;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 .backdrop {
-    position: fixed;
-    inset: 0;
-    background: radial-gradient(circle at 50% 0%, rgba(255, 139, 95, 0.08), transparent 35%);
-    pointer-events: none;
-    z-index: 0;
+    display: none;
 }
 
 .container {
     position: relative;
     z-index: 1;
-    max-width: 1200px;
-    margin: 0 auto 80px;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 24px 60px;
 }
 
 .eyebrow {
     text-transform: uppercase;
-    letter-spacing: 1px;
-    font-size: 11px;
-    color: var(--muted);
-    margin: 0 0 2px;
+    letter-spacing: 1.5px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent);
+    margin: 0 0 8px;
 }
 
 .muted {
     color: var(--muted);
     margin: 4px 0 0;
+    font-size: 14px;
 }
 
 .empty {
-    padding: 12px;
+    padding: 40px 20px;
     color: var(--muted);
     text-align: center;
-    border: 1px dashed var(--border);
+    border: 2px dashed var(--border);
     border-radius: 12px;
+    background: var(--bg);
+    font-size: 15px;
 }
 
+/* Скроллбары */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg);
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--border-dark);
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--muted);
+}
+
+/* Адаптивность */
 @media (max-width: 900px) {
     body {
-        padding: 16px;
+        padding: 0;
+    }
+
+    .container {
+        padding: 0 16px 40px;
     }
 
     .hero {
         grid-template-columns: 1fr;
     }
 }
-

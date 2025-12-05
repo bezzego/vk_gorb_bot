@@ -10,14 +10,16 @@
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-<nav class="topbar">
-    <div class="logo">VK Promo Desk</div>
-    <div class="top-actions">
-        <a class="link" href="/">Панель</a>
-    </div>
-</nav>
-<div class="backdrop"></div>
+    <!-- Навигация -->
+    <nav class="topbar">
+        <div class="logo">VK Promo Desk</div>
+        <div class="top-actions">
+            <a class="link" href="/">Панель</a>
+        </div>
+    </nav>
+
     <main class="container">
+        <!-- Заголовок страницы -->
         <header class="hero single">
             <div>
                 <p class="eyebrow">Настройки</p>
@@ -25,7 +27,7 @@
                 <p class="lede">Безопасное место для токенов: данные остаются локально в config.json. Мы подскажем, если что-то не так.</p>
                 <div class="hero-actions">
                     <a class="btn ghost" href="/">Назад в панель</a>
-                    <button class="btn primary" id="btn-save-config">Сохранить</button>
+                    <button class="btn primary" id="btn-save-config">Сохранить настройки</button>
                 </div>
                 <div class="hero-stats">
                     <div class="mini-card">
@@ -36,66 +38,73 @@
             </div>
         </header>
 
+        <!-- Основной контент -->
         <section class="grid single">
+            
+            <!-- Секция сообществ -->
             <article class="card wide">
-            <div class="card-header">
-                <div>
-                    <p class="eyebrow">Сообщества</p>
-                    <h2>Список групп</h2>
-                    <p class="muted">Добавьте несколько групп, отметьте активную и сохраните.</p>
+                <div class="card-header">
+                    <div>
+                        <p class="eyebrow">Сообщества</p>
+                        <h2>Список групп</h2>
+                        <p class="muted">Добавьте несколько групп, отметьте активную и сохраните.</p>
+                    </div>
+                    <button class="btn ghost" id="btn-add-community" type="button">+ Добавить</button>
                 </div>
-                <button class="btn ghost" id="btn-add-community" type="button">Добавить</button>
-            </div>
-            <div id="communities-list" class="community-list"></div>
-        </article>
+                <div id="communities-list" class="community-list"></div>
+            </article>
 
-        <article class="card wide">
-            <div class="card-header">
-                <div>
-                    <p class="eyebrow">Общие параметры</p>
-                    <h2>Дефолты рассылки</h2>
-                    <p class="muted">Применяются ко всем сообществам.</p>
+            <!-- Общие параметры -->
+            <article class="card wide">
+                <div class="card-header">
+                    <div>
+                        <p class="eyebrow">Общие параметры</p>
+                        <h2>Дефолты рассылки</h2>
+                        <p class="muted">Применяются ко всем сообществам.</p>
+                    </div>
                 </div>
-            </div>
-            <form id="config-form" class="form-grid">
-                <div class="two-cols">
+                <form id="config-form" class="form-grid">
+                    <div class="two-cols">
+                        <label>
+                            <span>Задержка, сек</span>
+                            <input type="number" step="0.05" min="0.05" max="30" name="request_delay" id="request_delay" value="{{ config.request_delay }}">
+                        </label>
+                        <label>
+                            <span>Активная группа</span>
+                            <input type="number" disabled value="{{ config.active_group_id or config.group_id }}">
+                        </label>
+                    </div>
                     <label>
-                        <span>Задержка, сек</span>
-                        <input type="number" step="0.05" min="0.05" max="30" name="request_delay" id="request_delay" value="{{ config.request_delay }}">
+                        <span>Текст ответа</span>
+                        <textarea name="promo_message" id="promo_message" rows="3" placeholder="Спасибо за участие...">{{ config.promo_message }}</textarea>
                     </label>
-                    <label>
-                        <span>Активная группа</span>
-                        <input type="number" disabled value="{{ config.active_group_id or config.group_id }}">
-                    </label>
-                </div>
-                <label>
-                    <span>Текст ответа</span>
-                    <textarea name="promo_message" id="promo_message" rows="3" placeholder="Спасибо за участие...">{{ config.promo_message }}</textarea>
-                </label>
-            </form>
-        </article>
+                </form>
+            </article>
 
-        <article class="card wide callout">
-            <div class="card-header">
-                <div>
-                    <p class="eyebrow">Памятка</p>
-                    <h2>Как защитить токены</h2>
-                    <p class="muted">Три простых правила для клиента.</p>
+            <!-- Памятка -->
+            <article class="card wide callout">
+                <div class="card-header">
+                    <div>
+                        <p class="eyebrow">Памятка</p>
+                        <h2>Как защитить токены</h2>
+                        <p class="muted">Три простых правила для безопасности.</p>
+                    </div>
                 </div>
-            </div>
-            <ul class="list">
-                <li><strong>Держите файл локально.</strong> Не отправляйте config.json в мессенджеры и не коммитьте в git.</li>
-                <li><strong>Регулярно обновляйте.</strong> Если VK обнуляет токен, вставьте новый и нажмите «Сохранить».</li>
-                <li><strong>Разделяйте доступ.</strong> Пользовательский токен — для чтения, токен группы — для ответов.</li>
-            </ul>
-        </article>
-    </section>
-</main>
+                <ul class="list">
+                    <li><strong>Держите файл локально.</strong> Не отправляйте config.json в мессенджеры и не коммитьте в git.</li>
+                    <li><strong>Регулярно обновляйте.</strong> Если VK обнуляет токен, вставьте новый и нажмите «Сохранить».</li>
+                    <li><strong>Разделяйте доступ.</strong> Пользовательский токен — для чтения, токен группы — для ответов.</li>
+                </ul>
+            </article>
 
-<div class="toast" id="toast"></div>
-<script>
-    window.__CONFIG__ = {{ config_dict | tojson | safe }};
-</script>
-<script src="/static/settings.js"></script>
+        </section>
+    </main>
+
+    <div class="toast" id="toast"></div>
+    
+    <script>
+        window.__CONFIG__ = {{ config_dict | tojson | safe }};
+    </script>
+    <script src="/static/settings.js"></script>
 </body>
 </html>

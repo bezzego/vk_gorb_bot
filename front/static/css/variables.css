@@ -1,17 +1,54 @@
 :root {
-    --bg: #050915;
-    --panel: rgba(16, 22, 40, 0.9);
-    --card: rgba(18, 24, 42, 0.75);
-    --accent: #ff9b6b;
-    --accent-2: #7dd7ff;
-    --accent-3: #b794ff;
-    --text: #f6f7fb;
-    --muted: #9ea6ba;
-    --border: rgba(255, 255, 255, 0.08);
-    --success: #2dcc70;
-    --warning: #fbbf24;
-    --danger: #ef4444;
-    --shadow: 0 25px 80px rgba(0, 0, 0, 0.45);
+    /* Мягкая цветовая палитра - приятная для глаз */
+    --bg: #f5f7fa;
+    --bg-secondary: #ffffff;
+    --panel: #ffffff;
+    --card: #ffffff;
+    --card-hover: #fafbfc;
+    
+    /* Мягкие акцентные цвета */
+    --accent: #5b8def;
+    --accent-light: #7ba3f0;
+    --accent-dark: #4a7dd9;
+    --accent-2: #6bc4a6;
+    --accent-3: #a78bfa;
+    
+    /* Текстовые цвета */
+    --text: #1a202c;
+    --text-secondary: #4a5568;
+    --muted: #718096;
+    --muted-light: #a0aec0;
+    
+    /* Границы и разделители */
+    --border: #e2e8f0;
+    --border-light: #f1f5f9;
+    --border-dark: #cbd5e0;
+    
+    /* Статусные цвета - мягкие оттенки */
+    --success: #48bb78;
+    --success-light: #9ae6b4;
+    --success-bg: #f0fff4;
+    --warning: #ed8936;
+    --warning-light: #fbd38d;
+    --warning-bg: #fffaf0;
+    --danger: #f56565;
+    --danger-light: #fc8181;
+    --danger-bg: #fff5f5;
+    --info: #4299e1;
+    --info-light: #90cdf4;
+    --info-bg: #ebf8ff;
+    
+    /* Тени - мягкие и деликатные */
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.12);
+    
+    /* Градиенты - мягкие переходы */
+    --gradient-primary: linear-gradient(135deg, #5b8def 0%, #6bc4a6 100%);
+    --gradient-secondary: linear-gradient(135deg, #a78bfa 0%, #7ba3f0 100%);
+    --gradient-bg: linear-gradient(135deg, #f5f7fa 0%, #ffffff 100%);
+    
     font-family: "Space Grotesk", "Manrope", system-ui, -apple-system, sans-serif;
 }
 
