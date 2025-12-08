@@ -53,6 +53,14 @@ class WatchManager:
         asyncio.create_task(self._run(state, cfg))
         return state
 
+    def stop(self, watch_id: str) -> bool:
+        state = self.watchers.get(watch_id)
+        if not state:
+            return False
+        state.status = "stopped"
+        state.add_log("Остановка по запросу пользователя.")
+        return True
+
     async def _run(self, state: WatchState, cfg: BotConfig) -> None:
         client = VKService(cfg)
         state.add_log("Старт автоответа, считываю последние комментарии...")

@@ -19,6 +19,7 @@ import {
     setActiveGroup,
     startWatch,
     fetchWatchers,
+    stopWatch,
 } from "./api.js";
 
 async function handleLoadPosts() {
@@ -79,6 +80,7 @@ async function refreshWatchers() {
     state.watchers = await fetchWatchers();
     renderWatchers(state.watchers);
     renderPosts(state.posts); // обновляем подсветку постов
+    bindWatcherStopButtons();
 }
 
 async function handleChangeCommunity(groupId) {
@@ -122,6 +124,24 @@ async function handleStartWatch() {
     } catch (err) {
         toast("Не удалось запустить автоответ", true);
     }
+}
+
+function bindWatcherStopButtons() {
+    document.querySelectorAll(".btn-stop-watch").forEach((btn) => {
+        btn.addEventListener("click", async (e) => {
+            e.preventDefault();
+            const id = btn.dataset.id;
+            if (!id) return;
+            try {
+                await stopWatch(id);
+                toast("Автоответ остановлен");
+                await refreshWatchers();
+                await handleLoadPosts();
+            } catch (err) {
+                toast("Не удалось остановить автоответ", true);
+            }
+        });
+    });
 }
 
 function bindEvents() {

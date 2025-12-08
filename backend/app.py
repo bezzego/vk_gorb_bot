@@ -305,5 +305,13 @@ async def list_watch():
     return {"items": watchers.list()}
 
 
+@app.delete("/api/watch/{watch_id}")
+async def stop_watch(watch_id: str):
+    ok = watchers.stop(watch_id)
+    if not ok:
+        raise HTTPException(status_code=404, detail="Watch not found")
+    return {"ok": True}
+
+
 if __name__ == "__main__":
     uvicorn.run("app:app", host="0.0.0.0", port=8000, reload=True, reload_dirs=["../front", "."])

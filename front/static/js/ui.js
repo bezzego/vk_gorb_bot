@@ -175,6 +175,7 @@ export function renderWatchers(items) {
             <div class="pill ${w.status}">${w.status}</div>
             <div class="muted">Ответов: ${w.replied}</div>
             <div class="muted">Ошибок: ${w.errors}</div>
+            ${w.status === "running" ? `<button class="btn ghost btn-stop-watch" data-id="${w.id}">Стоп</button>` : ""}
         `;
         els.watchStats.appendChild(row);
     });

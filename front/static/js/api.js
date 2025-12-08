@@ -110,3 +110,9 @@ export async function fetchWatchers() {
         return [];
     }
 }
+
+export async function stopWatch(watchId) {
+    const res = await fetch(`/api/watch/${watchId}`, { method: "DELETE" });
+    if (!res.ok) throw new Error(await res.text());
+    return await res.json();
+}
