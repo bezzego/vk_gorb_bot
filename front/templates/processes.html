@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Процессы | VK Admin Panel</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<nav class="topbar">
+    <div class="logo">VK Promo Desk</div>
+    <div class="top-actions">
+        <a class="link" href="/">Панель</a>
+        <a class="link" href="/settings">Настройки</a>
+    </div>
+</nav>
+<div class="backdrop"></div>
+<main class="container">
+    <header class="hero single">
+        <div>
+            <p class="eyebrow">Мониторинг</p>
+            <h1>Запущенные процессы</h1>
+            <p class="lede">Общие для всех администраторов. Здесь видно активные рассылки и автоответы.</p>
+        </div>
+    </header>
+
+    <section class="grid single">
+        <article class="card wide">
+            <div class="card-header">
+                <div>
+                    <p class="eyebrow">Рассылки</p>
+                    <h2>Очередь задач</h2>
+                </div>
+                <button class="btn ghost" id="btn-refresh-tasks">Обновить</button>
+            </div>
+            <div class="table" id="process-tasks">
+                <div class="empty">Пока нет задач.</div>
+            </div>
+        </article>
+
+        <article class="card wide" id="watchers">
+            <div class="card-header">
+                <div>
+                    <p class="eyebrow">Автоответы</p>
+                    <h2>Активные</h2>
+                </div>
+                <button class="btn ghost" id="btn-refresh-watchers">Обновить</button>
+            </div>
+            <div class="table" id="process-watchers">
+                <div class="empty">Нет активных автоответов.</div>
+            </div>
+        </article>
+    </section>
+</main>
+
+<div class="toast" id="toast"></div>
+<script>
+    window.__CONFIG__ = {{ config_dict | tojson | safe }};
+</script>
+<script type="module" src="/static/js/processes.js"></script>
+</body>
+</html>

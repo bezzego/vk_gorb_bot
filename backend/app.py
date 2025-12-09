@@ -92,6 +92,19 @@ async def settings(request: Request):
     )
 
 
+@app.get("/processes", response_class=HTMLResponse)
+async def processes(request: Request):
+    cfg = load_config()
+    return templates.TemplateResponse(
+        "processes.html",
+        {
+            "request": request,
+            "config": cfg,
+            "config_dict": config_to_dict(cfg),
+        },
+    )
+
+
 @app.get("/api/config")
 async def get_config():
     cfg = load_config()
